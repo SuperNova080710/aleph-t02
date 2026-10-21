@@ -1,112 +1,15 @@
-import test from "node:test";
-import assert from "node:assert/strict";
-import {
-  createGame,
-  move,
-  pause,
-  resume,
-  advance,
-  RULES,
-} from "../src/engine.js";
-import { load, save, defaults, SAVE_KEY, validSave } from "../src/storage.js";
-test("10 input events cause 10 actions; exact movement and bounds", () => {
-  const g = createGame();
-  for (let i = 0; i < 10; i++) move(g, i % 2 ? -1 : 1);
-  assert.equal(g.inputs, 10);
-  assert.equal(g.x, 222);
-  for (let i = 0; i < 100; i++) move(g, -1);
-  assert.equal(g.x, 0);
-  for (let i = 0; i < 100; i++) move(g, 1);
-  assert.equal(g.x, 444);
-});
-test("pause freezes the complete model; resume continues", () => {
-  const g = createGame();
-  advance(g, 1);
-  pause(g);
-  const snapshot = JSON.stringify(g);
-  advance(g, 10);
-  move(g, 1);
-  assert.equal(JSON.stringify(g), snapshot);
-  resume(g);
-  advance(g, 0.1);
-  assert.ok(g.elapsed > 1);
-});
-test("collision fails and terminal state does not advance", () => {
-  const g = createGame();
-  g.bugs = [{ x: g.x, y: 450, w: 32, h: 28, vy: 200 }];
-  advance(g, 0.01);
-  assert.equal(g.state, "lose");
-  const t = g.elapsed;
-  advance(g, 10);
-  assert.equal(g.elapsed, t);
-});
-test("success at 30s and reset from either terminal outcome", () => {
-  const g = createGame();
-  g.elapsed = 29.99;
-  g.spawn = 0;
-  advance(g, 0.1);
-  assert.equal(g.state, "win");
-  assert.equal(g.elapsed, 30);
-  for (const state of ["win", "lose"]) {
-    g.state = state;
-    const fresh = createGame();
-    assert.equal(fresh.elapsed, 0);
-    assert.equal(fresh.score, 0);
-    assert.equal(fresh.inputs, 0);
-    assert.equal(fresh.bugs.length, 0);
-    assert.equal(fresh.x, 222);
-  }
-});
-test("speed changes only fall velocity: same spawn positions and count", () => {
-  const a = createGame(1, 17),
-    b = createGame(0.8, 17);
-  advance(a, 1.8);
-  advance(b, 1.8);
-  assert.equal(a.bugs.length, b.bugs.length);
-  a.bugs.forEach((bug, i) => {
-    assert.equal(bug.x, b.bugs[i].x);
-    assert.equal(bug.vy * 0.8, b.bugs[i].vy);
-  });
-  assert.equal(RULES.spawnInterval, 0.85);
-});
-test("empty, invalid JSON, arrays, type errors and overflow recover to defaults", () => {
-  for (const raw of [
-    null,
-    "",
-    "{",
-    "[]",
-    "null",
-    JSON.stringify({ ...defaults(), best: 31 }),
-    JSON.stringify({ ...defaults(), best: "10" }),
-    JSON.stringify({ ...defaults(), records: [{}] }),
-    JSON.stringify({ ...defaults(), wins: 2, rounds: 1 }),
-  ]) {
-    let saved;
-    const s = { getItem: () => raw, setItem: (k, v) => (saved = v) };
-    assert.deepEqual(load(s).data, defaults());
-  }
-});
-test("valid records survive reload and storage errors remain recoverable", () => {
-  const d = { ...defaults(), best: 12, wins: 1, rounds: 2 };
-  let raw;
-  const s = {
-    setItem: (k, v) => {
-      assert.equal(k, SAVE_KEY);
-      raw = v;
-    },
-    getItem: () => raw,
-  };
-  save(s, d);
-  assert.deepEqual(load(s).data, d);
-  const broken = {
-    getItem() {
-      throw Error();
-    },
-    setItem() {
-      throw Error();
-    },
-  };
-  assert.deepEqual(load(broken).data, defaults());
-  assert.match(save(broken, d), /이 탭/);
-  assert.ok(validSave(d));
-});
+import test from 'node:test';import assert from 'node:assert/strict';
+import {RULES,createGame,advance,move,dash,pause,resume,result,multiplier} from '../src/engine.js';
+import {defaults,load,save,validSave} from '../src/storage.js';
+const barrier=(lane,z=.002,row=0)=>({kind:'barrier',lane,z,row,done:false});const core=(lane,z=.002,row=0)=>({kind:'core',lane,z,row,done:false});
+test('10 alternating events apply 10 actions and correct lane; boundaries clamp',()=>{const g=createGame();for(let i=0;i<10;i++)move(g,i%2?-1:1);assert.equal(g.inputs,10);assert.equal(g.lane,1);move(g,-1);move(g,-1);assert.equal(g.lane,0);});
+test('dash activates once, counts rejected input, cooldown is enforced',()=>{const g=createGame();assert.ok(dash(g));assert.equal(g.dashes,1);assert.equal(dash(g),false);assert.equal(g.inputs,2);g.objects=[barrier(1)];advance(g,.02);assert.equal(g.health,3);assert.equal(g.score,100);assert.ok(g.events.some(e=>e.type==='break'));});
+test('three separated hits fail; invulnerability prevents stacked damage',()=>{const g=createGame();for(let i=0;i<3;i++){g.invulnerable=0;g.objects=[barrier(1),barrier(1)];advance(g,.02);assert.equal(g.health,2-i);}assert.equal(g.state,'lose');const before=JSON.stringify(g);advance(g,3);assert.equal(JSON.stringify(g),before);});
+test('five cores increase multiplier; hit resets combo',()=>{const g=createGame();for(let i=0;i<5;i++){g.objects=[core(1)];advance(g,.02);}assert.equal(g.cores,5);assert.equal(g.combo,5);assert.equal(multiplier(g),2);assert.equal(g.score,300);g.objects=[barrier(1)];advance(g,.02);assert.equal(g.combo,0);assert.equal(g.maxCombo,5);});
+test('pause freezes all timer and input state; resume continues',()=>{const g=createGame();dash(g);advance(g,.1);pause(g);const before=JSON.stringify(g);advance(g,4);move(g,1);dash(g);assert.equal(JSON.stringify(g),before);resume(g);advance(g,.1);assert.ok(g.elapsed>.1);});
+test('success at exactly 30 sec grants remaining shield bonus',()=>{const g=createGame();g.elapsed=29.99;advance(g,.1);assert.equal(g.elapsed,30);assert.equal(g.state,'win');assert.equal(g.score,450);assert.equal(result(g).reason,'30초 구간 완주');});
+test('same seed and speed repeat identical complete state',()=>{const a=createGame(1,123),b=createGame(1,123);for(let i=0;i<100;i++){if(i%9===0){move(a,1);move(b,1);}advance(a,.02);advance(b,.02);}assert.equal(JSON.stringify(a),JSON.stringify(b));});
+test('speed only changes approach rate, not schedule or lanes',()=>{const a=createGame(1,42),b=createGame(1.15,42);advance(a,1.8);advance(b,1.8);assert.equal(a.rows,b.rows);assert.deepEqual(a.objects.map(o=>[o.id,o.lane,o.kind]),b.objects.map(o=>[o.id,o.lane,o.kind]));a.objects.forEach((o,i)=>assert.ok(Math.abs((1-o.z)*1.15-(1-b.objects[i].z))<1e-7));});
+test('every generated row has a safe core lane, bounded object count',()=>{const g=createGame();for(let i=0;i<3600&&g.state==='playing';i++){g.invulnerable=1;advance(g,1/120);for(const core of g.objects.filter(o=>o.kind==='core'))assert.ok(!g.objects.some(o=>o.row===core.row&&o.kind==='barrier'&&o.lane===core.lane));assert.ok(g.objects.length<40);}assert.equal(g.state,'win');});
+test('empty, corrupt, wrong type/version/range records use defaults',()=>{for(const raw of [null,'','{','[]','null',JSON.stringify({...defaults(),best:-1}),JSON.stringify({...defaults(),best:'100'}),JSON.stringify({...defaults(),records:[{}]}),JSON.stringify({...defaults(),wins:2,rounds:1})])assert.deepEqual(load({getItem:()=>raw,setItem(){}}).data,defaults());});
+test('save/reload and denied storage recover without breaking',()=>{let raw;const s={getItem:()=>raw,setItem:(k,v)=>raw=v};const d={...defaults(),best:100,bestCombo:2,rounds:1};save(s,d);assert.deepEqual(load(s).data,d);const blocked={getItem(){throw Error();},setItem(){throw Error();}};assert.deepEqual(load(blocked).data,defaults());assert.match(save(blocked,d),/현재 탭/);assert.ok(validSave(d));});

@@ -1,63 +1,10 @@
-import { writeFile } from "node:fs/promises";
-import {
-  createGame,
-  advance,
-  move,
-  result,
-  EXPERIMENT_SEEDS,
-  RULES,
-} from "../src/engine.js";
-// Deterministic, deliberately limited pilot. This is NOT a human usability study.
-// React every 0.2s, only to bugs below y=340, one 24px input per reaction.
-function pilot(g) {
-  const b = g.bugs
-    .filter((b) => b.y > 340 && b.y < 480)
-    .sort((a, b) => b.y - a.y)[0];
-  if (!b) return;
-  if (g.x < b.x + b.w + 5 && g.x + 36 > b.x - 5)
-    move(g, g.x + 18 < b.x + 16 ? -1 : 1);
-}
-const records = [];
-for (const [group, speed] of [
-  ["A", 1],
-  ["B", 0.8],
-])
-  for (const seed of EXPERIMENT_SEEDS) {
-    const g = createGame(speed, seed);
-    let tick = 0;
-    while (g.state === "playing") {
-      if (tick % 24 === 0) pilot(g);
-      advance(g, 1 / 120);
-      tick++;
-    }
-    records.push(result(g, "experiment", group));
-  }
-function stats(group) {
-  const a = records.filter((r) => r.group === group),
-    t = a.map((r) => r.time).sort((a, b) => a - b);
-  return {
-    count: a.length,
-    medianSeconds: (t[4] + t[5]) / 2,
-    minSeconds: t[0],
-    maxSeconds: t[9],
-    wins: a.filter((r) => r.outcome === "win").length,
-    collisions: a.filter((r) => r.outcome === "lose").length,
-  };
-}
-const output = {
-  source: "deterministic-automated-pilot-not-human",
-  rules: RULES,
-  changedParameter: "fall speed multiplier only",
-  fixed:
-    "same 10 seeds, player dimensions/step, spawn interval, pilot reaction 0.2 seconds, threshold y=340",
-  groups: { A: stats("A"), B: stats("B") },
-  selectedSpeed: 1,
-  reason:
-    "1.0×는 생존 중앙값 30초·충돌 4회, 0.8×는 중앙값 22.9165초·충돌 7회였습니다. 이 자동 파일럿에서는 1.0×가 더 안정적이므로 기본값으로 선택합니다. 속도가 느리면 버그가 오래 남아 반드시 쉽지는 않습니다. 사람 플레이의 난이도를 보증하지 않으며, 학생은 20회 기록 후 최종 판단해야 합니다.",
-  records,
-};
-await writeFile(
-  "docs/evidence/automated-20-runs.json",
-  JSON.stringify(output, null, 2),
-);
-console.log(output.groups);
+import {writeFile} from 'node:fs/promises';
+import {RULES,createGame,advance,move,dash,result,EXPERIMENT_SEEDS} from '../src/engine.js';
+// Limited deterministic pilot: react every .25s, consider only objects within z=.15.
+// No access to future seeds; same policy and 10 seeds in both speed groups.
+function pilot(g){const visible=g.objects.filter(o=>!o.done&&o.z>0&&o.z<.15).sort((a,b)=>a.z-b.z);if(!visible.length)return;const row=visible[0].row,core=visible.find(o=>o.row===row&&o.kind==='core');if(core&&core.lane!==g.lane)move(g,Math.sign(core.lane-g.lane));if(g.cooldown<=0&&visible.some(o=>o.row===row&&o.kind==='barrier'&&o.lane===g.lane&&o.z<.08))dash(g);}
+const records=[];
+for(const [group,speed] of [['A',1],['B',1.15]])for(const seed of EXPERIMENT_SEEDS){const g=createGame(speed,seed);let tick=0;while(g.state==='playing'){if(tick%30===0)pilot(g);advance(g,1/120);g.events.length=0;tick++;}records.push(result(g,'experiment',group));}
+const median=a=>{a.sort((a,b)=>a-b);return(a[4]+a[5])/2;};
+function stats(group){const a=records.filter(r=>r.group===group);return {count:a.length,scoreMedian:median(a.map(r=>r.score)),scoreMin:Math.min(...a.map(r=>r.score)),scoreMax:Math.max(...a.map(r=>r.score)),survivalMedian:median(a.map(r=>r.time)),survivalMin:Math.min(...a.map(r=>r.time)),survivalMax:Math.max(...a.map(r=>r.time)),wins:a.filter(r=>r.outcome==='win').length,failures:a.filter(r=>r.outcome==='lose').length,totalHits:a.reduce((n,r)=>n+r.hits,0)};}
+const output={game:'NEON AFTERBURN',source:'deterministic-automated-pilot-not-human',changedParameter:'approach speed multiplier only: 1.0 versus 1.15',fixed:'same 10 seeds, phase spawn intervals, geometry, dash, shield, scoring and pilot policy (.25s reaction, z<.15 horizon)',rules:RULES,groups:{A:stats('A'),B:stats('B')},records};await writeFile('docs/evidence/automated-20-runs.json',JSON.stringify(output,null,2));console.log(output.groups);

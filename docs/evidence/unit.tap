@@ -1,52 +1,76 @@
 TAP version 13
-# Subtest: 10 input events cause 10 actions; exact movement and bounds
-ok 1 - 10 input events cause 10 actions; exact movement and bounds
+# Subtest: 10 alternating events apply 10 actions and correct lane; boundaries clamp
+ok 1 - 10 alternating events apply 10 actions and correct lane; boundaries clamp
   ---
-  duration_ms: 0.781811
+  duration_ms: 1.670329
   type: 'test'
   ...
-# Subtest: pause freezes the complete model; resume continues
-ok 2 - pause freezes the complete model; resume continues
+# Subtest: dash activates once, counts rejected input, cooldown is enforced
+ok 2 - dash activates once, counts rejected input, cooldown is enforced
   ---
-  duration_ms: 0.565244
+  duration_ms: 0.574179
   type: 'test'
   ...
-# Subtest: collision fails and terminal state does not advance
-ok 3 - collision fails and terminal state does not advance
+# Subtest: three separated hits fail; invulnerability prevents stacked damage
+ok 3 - three separated hits fail; invulnerability prevents stacked damage
   ---
-  duration_ms: 0.293694
+  duration_ms: 0.36289
   type: 'test'
   ...
-# Subtest: success at 30s and reset from either terminal outcome
-ok 4 - success at 30s and reset from either terminal outcome
+# Subtest: five cores increase multiplier; hit resets combo
+ok 4 - five cores increase multiplier; hit resets combo
   ---
-  duration_ms: 0.181764
+  duration_ms: 0.305803
   type: 'test'
   ...
-# Subtest: speed changes only fall velocity: same spawn positions and count
-ok 5 - speed changes only fall velocity: same spawn positions and count
+# Subtest: pause freezes all timer and input state; resume continues
+ok 5 - pause freezes all timer and input state; resume continues
   ---
-  duration_ms: 0.316408
+  duration_ms: 0.294536
   type: 'test'
   ...
-# Subtest: empty, invalid JSON, arrays, type errors and overflow recover to defaults
-ok 6 - empty, invalid JSON, arrays, type errors and overflow recover to defaults
+# Subtest: success at exactly 30 sec grants remaining shield bonus
+ok 6 - success at exactly 30 sec grants remaining shield bonus
   ---
-  duration_ms: 1.147173
+  duration_ms: 0.276819
   type: 'test'
   ...
-# Subtest: valid records survive reload and storage errors remain recoverable
-ok 7 - valid records survive reload and storage errors remain recoverable
+# Subtest: same seed and speed repeat identical complete state
+ok 7 - same seed and speed repeat identical complete state
   ---
-  duration_ms: 0.361106
+  duration_ms: 4.015708
   type: 'test'
   ...
-1..7
-# tests 7
+# Subtest: speed only changes approach rate, not schedule or lanes
+ok 8 - speed only changes approach rate, not schedule or lanes
+  ---
+  duration_ms: 1.161668
+  type: 'test'
+  ...
+# Subtest: every generated row has a safe core lane, bounded object count
+ok 9 - every generated row has a safe core lane, bounded object count
+  ---
+  duration_ms: 8.821808
+  type: 'test'
+  ...
+# Subtest: empty, corrupt, wrong type/version/range records use defaults
+ok 10 - empty, corrupt, wrong type/version/range records use defaults
+  ---
+  duration_ms: 1.192084
+  type: 'test'
+  ...
+# Subtest: save/reload and denied storage recover without breaking
+ok 11 - save/reload and denied storage recover without breaking
+  ---
+  duration_ms: 0.523462
+  type: 'test'
+  ...
+1..11
+# tests 11
 # suites 0
-# pass 7
+# pass 11
 # fail 0
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 91.602539
+# duration_ms 114.206677
