@@ -2,7 +2,8 @@
 
 ## 주소
 
-- 결과물: **이 브랜치를 반영한 공개 배포 주소 확인 후 입력**
+- 미리보기: https://aleph-t02-git-feat-t02-neon-afterburn-mallang1.vercel.app
+- 제출 결과물: 위 주소가 시크릿 창에서 인증 없이 열리는지 확인 후 사용. 인증이 필요하면 공개 배포 주소를 사용.
 - 소스: https://github.com/SuperNova080710/aleph-t02/tree/feat/t02-neon-afterburn
 
 기존 사이트 주소가 새 게임으로 바뀌었는지 확인해야 합니다. 이전 버그 피하기가 표시되는 주소를 이번 버전 결과물로 제출하지 마세요.

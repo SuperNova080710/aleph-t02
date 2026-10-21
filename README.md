@@ -63,6 +63,12 @@ A 1.0× / B 1.15×에서 **접근 배수 하나만 변경**합니다. 같은 시
 
 [20판 원본](docs/evidence/automated-20-runs.json) · [조건 대응표](docs/acceptance.md) · [제출 안내](docs/submission.md)
 
+## 검증 결과
+
+- 단위 11개 + 브라우저 20개 + RUN LAB 4개 검사 통과.
+- 시간 가속 없는 600.140초 실행: 레인 이동735회, 재시작19회, 콘솔 오류0건, 종료 후 입력 정상.
+- 실행 소스 SHA-256이 현재 게임 코드와 일치합니다.
+
 ## 검증 재현
 
 ```bash
@@ -94,7 +100,7 @@ npm run test:soak
 
 ## 배포와 현재 제한
 
-필수 정적 파일: `index.html`, `style.css`, `src/`. 호스팅 루트에서 게시합니다. 기존 Vercel 프로젝트는 `https://aleph-t02.vercel.app`이나 이번 브랜치 코드가 배포되었다고 가정하지 마세요. 이전 PR 자동 배포가 Blocked였고, 현재 연결에서는 상세 원인을 확인하지 못했습니다. 새 버전이 공개 배포된 후 시크릿 창으로 C01을 확인해야 합니다.
+필수 정적 파일: `index.html`, `style.css`, `src/`. 호스팅 루트에서 게시합니다. 기존 Vercel 프로젝트는 `https://aleph-t02.vercel.app`이나 이번 브랜치 코드가 배포되었다고 가정하지 마세요. 이번 PR #2는 Vercel Ready/success로 배포됐습니다. [새 게임 미리보기](https://aleph-t02-git-feat-t02-neon-afterburn-mallang1.vercel.app)를 사용할 수 있습니다. 실행 환경에서 외부 접속이 시간 초과되어 미리보기의 무인증 접속은 아직 검증하지 못했습니다. 시크릿 창에서 C01을 확인해야 합니다.
 
 GitHub Issues 생성은 연결의 쓰기 권한 오류(403)로 차단되어 있습니다. [기능별 이슈 본문](docs/issues)과 생성 스크립트를 준비했습니다. 권한 있는 GitHub CLI 세션에서:
 

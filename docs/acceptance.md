@@ -4,7 +4,7 @@
 
 | 조건 | 새 게임 구현 / 증거 |
 |---|---|
-| C01 | 공개 GitHub 저장소. 새 브랜치의 게임 배포/시크릿 창 검증은 외부 배포 차단 해제 후 확인 필요 |
+| C01 | 공개 GitHub 저장소. PR #2 Vercel 배포 Ready/success 확인. 시크릿 창 무인증 접속은 외부 연결 시간 초과로 미검증 |
 | C03~C05 | 공개 규칙·키보드/버튼 조작·상태·시간·실드·점수·콤보·대시 재충전 표시 |
 | C06 | keydown/click 1건당 레인 변경 1회, 경계 제한. 이동 입력과 대시 입력은 별도 동작 |
 | C07 | 30초 완주 성공, 실드 3회 손실 실패 |
@@ -14,7 +14,7 @@
 | C13 | resize 전후 모델 동일, 이후 입력 정상 |
 | C14 | blur/visibilitychange 자동 정지, 직접 재개 시 그대로 이어짐 |
 | C15 | 정지 중 elapsed·dash·cooldown·objects·입력 전체 모델 불변 |
-| C16~C17 | 실제 600초 연속 실행 후 입력 가능, pageerror/console.error 0건을 tests/soak.mjs에서 검사. 새 버전 evidence/soak.json 참고 |
+| C16~C17 | 실제 600초 연속 실행 후 입력 가능, pageerror/console.error 0건을 tests/soak.mjs에서 검사. 실제600.140초·735회 이동·19회 재시작·오류0·종료 후 입력 정상. 새 버전 evidence/soak.json 참고 |
 | C18~C19 | 동일 정책으로 A/B 각10회 기록, 자동 파일럿임을 명시. automated-20-runs.json |
 | C20 | A1.0→B1.15 접근 배수 하나만 변경. 시드·생성 시간표·점수·실드·대시·파일럿 고정 |
 | C21 | A 점수 중앙값7470 vs B7230으로 기본1.0 선택. 완주율은 B가 높다는 반대 근거도 기록 |
