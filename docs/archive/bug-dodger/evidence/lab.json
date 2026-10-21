@@ -1,0 +1,15 @@
+{
+  "browser": "134.0.6998.35",
+  "checks": [
+    "UI experiment completes all A/B seeds exactly once; 10 + 10 records",
+    "JSON export contains all 20 records and exact judgment text",
+    "20 records survive reload",
+    "start does not trigger terminal effect",
+    "terminal effect appears only on completion and clears instantly",
+    "OS reduced motion is honored",
+    "denied localStorage still permits gameplay"
+  ],
+  "errors": [],
+  "pass": true,
+  "source": "automated-browser-UI-test-not-human-play"
+}

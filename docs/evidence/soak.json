@@ -1,0 +1,23 @@
+{
+  "test": "neon-afterburn-real-wall-clock-browser-soak",
+  "durationMs": 600140,
+  "browser": "134.0.6998.35",
+  "viewport": {
+    "width": 1366,
+    "height": 768
+  },
+  "speed": 1,
+  "moves": 735,
+  "dashes": 0,
+  "restarts": 19,
+  "errors": [],
+  "postRunInputCount": 1,
+  "sourceHashes": {
+    "src/app.js": "f8f28ef986ab36e9082bd029a32109c16e5f8df0f6084f3790d25dc6b4c712e8",
+    "src/engine.js": "154efd6f43160a0904ceef3d07e48b45a9a10e264eb42613c56771ccad85cb5b",
+    "src/renderer.js": "9d580ae7027cbd7820518bc49e528345b86afcd5a5467a9adb5da9ebb9caf0f7",
+    "src/storage.js": "09e30024a20bc95e2eed196c1058be113ceb516e96bf7c9820d33146374ebb47",
+    "src/audio.js": "d2b092e06689ba8ff4f9c0711e02814f3b3ec57eae2c39446acdbc3ac5b51dc4"
+  },
+  "pass": true
+}

@@ -1,0 +1,29 @@
+{
+  "game": "NEON AFTERBURN",
+  "browser": "134.0.6998.35",
+  "checks": [
+    "layout 1366x768",
+    "layout 1920x1080",
+    "layout 390x844",
+    "10 input events in less than 1s produce 10 lane actions",
+    "dash activates once and cooldown prevents duplicate activation",
+    "pause freezes time, dash, recharge and complete model",
+    "resize preserves game and input",
+    "focus loss pauses; explicit resume preserves model",
+    "three collisions fail before 30s and show a result",
+    "same-course retry resets every round field and keeps seed",
+    "30s success, core chain, multiplier and result statistics",
+    "restart after success resets combo and dash",
+    "best score survives reconnect",
+    "empty and corrupt save recovery",
+    "reduced motion immediately clears live effects",
+    "mute immediately stops all synthesized voices",
+    "OS reduced-motion supported",
+    "typing does not trigger game shortcuts",
+    "denied storage still allows play",
+    "zero browser console errors"
+  ],
+  "errors": [],
+  "pass": true,
+  "note": "Functional checks use a virtual clock. Real 600s test is separate."
+}

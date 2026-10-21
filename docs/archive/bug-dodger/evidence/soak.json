@@ -1,0 +1,16 @@
+{
+  "test": "real-wall-clock-browser-soak",
+  "durationMs": 600046,
+  "browser": "134.0.6998.35",
+  "viewport": {
+    "width": 1366,
+    "height": 768
+  },
+  "restarts": 26,
+  "inputs": 181,
+  "errors": [],
+  "postRunInputCount": 1,
+  "pass": true,
+  "testedSpeed": 0.8,
+  "note": "실행 시작 당시 선택값 0.8×로 수행. 재현 스크립트도 0.8×를 명시적으로 선택합니다. 시간 가속 없음."
+}

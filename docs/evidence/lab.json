@@ -1,0 +1,13 @@
+{
+  "game": "NEON AFTERBURN",
+  "browser": "134.0.6998.35",
+  "checks": [
+    "20 UI rounds: same 10 seeds, A 1.0 and B 1.15, restarts excluded",
+    "group count, score and survival medians visible",
+    "20 records and judgment exported as JSON",
+    "records survive reload"
+  ],
+  "errors": [],
+  "pass": true,
+  "source": "automated-ui-test-not-human"
+}

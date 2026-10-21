@@ -1,0 +1,8 @@
+import {SPEEDS,EXPERIMENT_SEEDS} from './engine.js';
+export const SAVE_KEY='neonAfterburn_v1';
+export const defaults=()=>({version:1,best:0,bestCombo:0,wins:0,rounds:0,speed:1,muted:true,reduced:false,records:[]});
+const int=(v,min,max)=>Number.isInteger(v)&&v>=min&&v<=max;
+export function validRecord(r){return r&&SPEEDS.includes(r.speed)&&int(r.seed,0,4294967295)&&typeof r.time==='number'&&Number.isFinite(r.time)&&r.time>=0&&r.time<=30&&int(r.score,0,1e6)&&int(r.cores,0,100)&&int(r.maxCombo,0,100)&&int(r.hits,0,3)&&int(r.nearMisses,0,200)&&int(r.dashes,0,100)&&int(r.inputs,0,1e6)&&['win','lose'].includes(r.outcome)&&(r.outcome!=='win'||r.time===30)&&r.reason===(r.outcome==='win'?'30초 구간 완주':'실드 3회 손실')&&['normal','experiment'].includes(r.mode)&&(r.mode==='normal'?r.group===null:['A','B'].includes(r.group)&&r.speed===(r.group==='A'?1:1.15)&&EXPERIMENT_SEEDS.includes(r.seed));}
+export function validSave(d){return d&&d.version===1&&int(d.best,0,1e6)&&int(d.bestCombo,0,100)&&int(d.wins,0,1e9)&&int(d.rounds,d.wins,1e9)&&SPEEDS.includes(d.speed)&&typeof d.muted==='boolean'&&typeof d.reduced==='boolean'&&Array.isArray(d.records)&&d.records.length<=200&&d.records.every(validRecord);}
+export function load(storage){try{const raw=storage.getItem(SAVE_KEY);if(raw===null||raw==='')return {data:defaults(),message:'이 기기에 기록을 저장합니다.'};const data=JSON.parse(raw);if(!validSave(data))throw Error();return {data,message:'이 기기의 기록을 불러왔습니다.'};}catch{const data=defaults();try{storage.setItem(SAVE_KEY,JSON.stringify(data));}catch{}return {data,message:'저장값 손상 또는 접근 제한: 기본값으로 복구했습니다.'};}}
+export function save(storage,data){try{storage.setItem(SAVE_KEY,JSON.stringify(data));return '이 기기에 기록을 저장했습니다.';}catch{return '저장 불가: 기록은 현재 탭에서만 유지됩니다.';}}
