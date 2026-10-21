@@ -118,7 +118,6 @@ try {
     }
     won = (await snapshot(page)).state === "win";
   }
-  console.log("success trial", await snapshot(page));
   assert.ok(won);
   assert.equal((await snapshot(page)).elapsed, 30);
   ok("success at 30 seconds");

@@ -10,7 +10,7 @@ T02-C03~C17, C22: 한 판의 시작·조작·성공·실패·재시작과 PC 경
 - [x] 재시작 시 시간·점수·버그·입력 수 초기화
 - [x] 1366×768, 1920×1080 및 모바일 레이아웃 검사
 - [x] 성공·실패·재시작·10회 연속 입력 브라우저 테스트
-- [ ] 10분 연속 실행 결과: docs/evidence/soak.json 확인
+- [x] 실제 600.046초 실행: 26회 재시작·181회 이동·콘솔 오류 0·종료 후 입력 정상 (docs/evidence/soak.json)
 
 ## 근거
 src/engine.js, src/app.js, tests/engine.test.mjs, tests/browser.mjs, tests/soak.mjs

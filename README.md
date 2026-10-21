@@ -50,6 +50,12 @@ npm start
 
 [원본 20회 기록](docs/evidence/automated-20-runs.json) · [전체 조건 대응표](docs/acceptance.md) · [제출 안내](docs/submission.md)
 
+## 검증 결과
+
+- 단위 검사 7개, 브라우저 기능 검사 17개, 비교 UI 검사 7개 통과.
+- 실제 600.046초 연속 실행(0.8×): 재시작 26회, 이동 181회, 콘솔 오류 0건, 종료 후 새 판 입력 정상.
+- 스크린샷과 JSON/TAP 결과는 `docs/evidence/`에 있습니다.
+
 ## 검증 재현
 
 ```bash
@@ -67,6 +73,7 @@ npm start
 
 ```bash
 npm run test:browser
+npm run test:lab
 npm run test:soak
 ```
 
@@ -76,7 +83,7 @@ npm run test:soak
 
 정적 사이트 호스팅에서 프로젝트 루트를 게시합니다. 필수 파일은 `index.html`, `style.css`, `src/`입니다. Vercel은 Framework Preset **Other**, Build Command 비움, Output Directory **.**로 설정할 수 있습니다. GitHub Pages는 브랜치 루트를 게시할 수 있습니다. 기존 main을 보존하고 새 브랜치에서 검토합니다.
 
-**이 브랜치의 공개 배포 주소는 아직 검증하지 않았습니다.** 소스가 공개인 것과 배포 게임이 로그인 없이 열리는 것은 별도 조건입니다. 제출 전 실제 배포 URL을 새 시크릿 창에서 확인하세요.
+**Vercel의 이 브랜치 자동 배포가 Blocked 상태입니다.** PR #1의 Vercel 상태와 배포 상세를 확인해야 합니다. 현재 연결로는 구체적인 차단 원인을 읽을 수 없습니다. 소스가 공개인 것과 배포 게임이 로그인 없이 열리는 것은 별도 조건입니다. 제출 전 실제 배포 URL을 새 시크릿 창에서 확인하세요.
 
 ## 이슈
 

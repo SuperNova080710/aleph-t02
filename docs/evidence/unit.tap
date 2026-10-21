@@ -1,0 +1,52 @@
+TAP version 13
+# Subtest: 10 input events cause 10 actions; exact movement and bounds
+ok 1 - 10 input events cause 10 actions; exact movement and bounds
+  ---
+  duration_ms: 0.781811
+  type: 'test'
+  ...
+# Subtest: pause freezes the complete model; resume continues
+ok 2 - pause freezes the complete model; resume continues
+  ---
+  duration_ms: 0.565244
+  type: 'test'
+  ...
+# Subtest: collision fails and terminal state does not advance
+ok 3 - collision fails and terminal state does not advance
+  ---
+  duration_ms: 0.293694
+  type: 'test'
+  ...
+# Subtest: success at 30s and reset from either terminal outcome
+ok 4 - success at 30s and reset from either terminal outcome
+  ---
+  duration_ms: 0.181764
+  type: 'test'
+  ...
+# Subtest: speed changes only fall velocity: same spawn positions and count
+ok 5 - speed changes only fall velocity: same spawn positions and count
+  ---
+  duration_ms: 0.316408
+  type: 'test'
+  ...
+# Subtest: empty, invalid JSON, arrays, type errors and overflow recover to defaults
+ok 6 - empty, invalid JSON, arrays, type errors and overflow recover to defaults
+  ---
+  duration_ms: 1.147173
+  type: 'test'
+  ...
+# Subtest: valid records survive reload and storage errors remain recoverable
+ok 7 - valid records survive reload and storage errors remain recoverable
+  ---
+  duration_ms: 0.361106
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 91.602539

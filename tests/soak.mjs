@@ -6,6 +6,7 @@ let inputs = 0,
   restarts = 0;
 const begin = Date.now();
 try {
+  await page.locator("#speed").selectOption("0.8");
   await page.locator("#primary").click();
   while (Date.now() - begin < 600000) {
     const g = await snapshot(page);
@@ -33,6 +34,7 @@ try {
     durationMs: Date.now() - begin,
     browser: browser.version(),
     viewport: { width: 1366, height: 768 },
+    testedSpeed: 0.8,
     restarts,
     inputs,
     errors,
