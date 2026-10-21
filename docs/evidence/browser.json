@@ -1,0 +1,25 @@
+{
+  "browser": "134.0.6998.35",
+  "checks": [
+    "layout 1366x768",
+    "layout 1920x1080",
+    "layout 390x844",
+    "10 inputs in <1s: exactly 10 movements",
+    "pause freeze and resume",
+    "resize preserves model and controls",
+    "blur freezes and explicit resume works",
+    "real collision ends in failure",
+    "effect disabled immediately",
+    "restart after failure resets round",
+    "success at 30 seconds",
+    "restart after success resets round",
+    "best survives reload",
+    "empty and corrupt save recovery",
+    "typing does not trigger game shortcuts",
+    "experiment restart keeps same seed and group",
+    "zero browser errors"
+  ],
+  "errors": [],
+  "pass": true,
+  "note": "Fast functional tests use Playwright clock; soak is separate real 600s run."
+}
